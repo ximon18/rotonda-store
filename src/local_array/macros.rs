@@ -96,7 +96,7 @@ macro_rules! match_node_for_strides {
                         // to avoid starting all over again with fetching the
                         // prefix node by node.
                         Err(newer_serial) => {
-                            println!("contention while creating node");
+                            //println!("contention while creating node");
                             // Somebody beat us to it. Try again with the new serial number.
                             // let mut old_serial = serial.fetch_add(1, Ordering::Acquire);
                             let new_serial = newer_serial + 1;
@@ -122,10 +122,10 @@ macro_rules! match_node_for_strides {
                                             cur_serial if cur_serial == new_serial => {
                                                 let found_prefix_id_clone = found_prefix_id.clone();
                                                 $self.store.update_node($cur_i,SizedStrideNode::$variant(current_node));
-                                                println!(
-                                                    "removing old prefix with serial {}...",
-                                                    newer_serial
-                                                );
+                                                //println!(
+                                                    // "removing old prefix with serial {}...",
+                                                    // newer_serial
+                                                // );
                                                 $self.store.remove_prefix(found_prefix_id_clone.set_serial(newer_serial));
                                                 return Ok(());
                                             },
@@ -134,7 +134,7 @@ macro_rules! match_node_for_strides {
                                             // more, reading the newly-current meta-data, updating it with our meta-data and
                                             // see if it works then. rinse-repeat.
                                             even_newer_serial => {
-                                                println!("Contention for {:?} with serial {} -> {}", found_prefix_id, newer_serial, even_newer_serial);
+                                                //println!("Contention for {:?} with serial {} -> {}", found_prefix_id, newer_serial, even_newer_serial);
                                                 let old_serial = serial.fetch_add(1, Ordering::Acquire);
                                                 $self.store.retrieve_prefix(found_prefix_id.set_serial(old_serial)).unwrap();
                                                 $self.update_prefix_meta(found_prefix_id, even_newer_serial, &new_meta)?;
@@ -198,12 +198,12 @@ macro_rules! match_node_for_strides {
                                         let found_prefix_id_clone = found_prefix_id.clone();
                                         // current_node.pfx_vec.insert(pfx_vec_index, found_prefix_id_clone.set_serial(new_serial));
                                         $self.store.update_node($cur_i,SizedStrideNode::$variant(current_node));
-                                        println!(
-                                            "removing old prefix with serial {}...",
-                                            old_serial
-                                        );
+                                        //println!(
+                                        //     "removing old prefix with serial {}...",
+                                        //     old_serial
+                                        // );
                                         $self.store.remove_prefix(found_prefix_id_clone.set_serial(old_serial));
-                                        // println!("current_node.pfx_vec {:?}", current_node.pfx_vec);
+                                        // //println!("current_node.pfx_vec {:?}", current_node.pfx_vec);
                                         return Ok(());
                                     },
                                     // FAILURE (Step 7)
@@ -211,7 +211,7 @@ macro_rules! match_node_for_strides {
                                     // more, reading the newly-current meta-data, updating it with our meta-data and
                                     // see if it works then. rinse-repeat.
                                     newer_serial => {
-                                        println!("Contention for {:?} with serial {} -> {}", found_prefix_id, old_serial, newer_serial);
+                                        //println!("Contention for {:?} with serial {} -> {}", found_prefix_id, old_serial, newer_serial);
                                         old_serial = serial.fetch_add(1, Ordering::Acquire);
                                         $self.store.retrieve_prefix(found_prefix_id.set_serial(old_serial)).unwrap();
                                         $self.update_prefix_meta(found_prefix_id, newer_serial, &new_meta)?;

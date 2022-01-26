@@ -130,8 +130,8 @@ impl<'a, Meta: routecore::record::Meta + MergeUpdate> Store<Meta> {
 
     #[cfg(feature = "cli")]
     pub fn print_funky_stats(&self) {
-        println!("{}", self.v4);
-        println!("{}", self.v6);
+        //println!("{}", self.v4);
+        //println!("{}", self.v6);
     }
 
     pub fn stats(&self) -> Stats {

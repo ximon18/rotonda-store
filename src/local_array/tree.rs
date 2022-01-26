@@ -599,7 +599,7 @@ where
         if pfx.len == 0 {
             let _res =
                 self.update_default_route_prefix_meta(pfx.meta.unwrap());
-            println!("--");
+            //println!("--");
             return Ok(());
         }
 
@@ -721,7 +721,7 @@ where
         &mut self,
         new_meta: Store::Meta,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        println!("Updating the default route...");
+        //println!("Updating the default route...");
         let mut old_serial =
             self.store.increment_default_route_prefix_serial();
         let new_serial = old_serial + 1;
@@ -731,9 +731,9 @@ where
         loop {
             match old_serial {
                 0 => {
-                    println!(
-                        "No default route prefix found, creating one..."
-                    );
+                    //println!(
+                        // "No default route prefix found, creating one..."
+                    // );
                     self.store_prefix(InternalPrefixRecord {
                         net: Store::AF::zero(),
                         len: 0,
@@ -746,17 +746,17 @@ where
                 // serial and creating the entry with that serial. Update the ptrbitarr
                 // in the current node in the global store and be done with it.
                 old_serial if old_serial == new_serial - 1 => {
-                    println!("Found default route prefix with serial {}, updating it to {}...", df_pfx_id.0.unwrap().2, new_serial);
+                    //println!("Found default route prefix with serial {}, updating it to {}...", df_pfx_id.0.unwrap().2, new_serial);
                     let pfx_idx_clone = df_pfx_id;
                     self.update_prefix_meta(
                         pfx_idx_clone,
                         new_serial,
                         &new_meta,
                     )?;
-                    println!(
-                        "removing old default route prefix with serial {}...",
-                        old_serial
-                    );
+                    //println!(
+                        // "removing old default route prefix with serial {}...",
+                        // old_serial
+                    // );
                     self.store
                         .remove_prefix(pfx_idx_clone.set_serial(old_serial));
                     return Ok(());
@@ -766,10 +766,10 @@ where
                 // more, reading the newly-current meta-data, updating it with our meta-data and
                 // see if it works then. rinse-repeat.
                 newer_serial => {
-                    println!(
-                        "contention for {:?} with serial {} -> {}",
-                        df_pfx_id, old_serial, newer_serial
-                    );
+                    //println!(
+                        // "contention for {:?} with serial {} -> {}",
+                        // df_pfx_id, old_serial, newer_serial
+                    // );
                     old_serial =
                         self.store.increment_default_route_prefix_serial();
                     self.store
@@ -807,7 +807,7 @@ where
                 .unwrap()
                 .clone_merge_update(merge_meta)?,
             None => {
-                println!("-");
+                //println!("-");
                 // panic!(
                 //     "panic: {}/{} with serial {} not found.",
                 //     update_prefix_idx.get_net().into_ipaddr(),
@@ -1023,7 +1023,7 @@ impl<'a, Store: StorageBackend> std::fmt::Display for TreeBitMap<Store> {
                 ) //  = scale / 7
             );
 
-            println!(" {}", prefixes_num);
+            //println!(" {}", prefixes_num);
         }
         Ok(())
     }

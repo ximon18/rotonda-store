@@ -570,7 +570,7 @@ impl<'a, Store: StorageBackend> std::fmt::Display for TreeBitMap<Store> {
                 ) //  = scale / 7
             );
 
-            println!(" {}", prefixes_num);
+            //println!(" {}", prefixes_num);
         }
         Ok(())
     }
